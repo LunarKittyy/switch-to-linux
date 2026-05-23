@@ -254,9 +254,11 @@ h2{
 }
 .tb{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .tb-r{background:#FF5F57}.tb-y{background:#FEBC2E}.tb-g{background:#28C840}
+.term-bar{position:relative}
 .term-title{
   font-family:var(--mono);font-size:.62rem;color:var(--mu);
-  letter-spacing:.05em;margin-inline:auto;
+  letter-spacing:.05em;
+  position:absolute;left:50%;translate:-50% 0;
 }
 .term-body{padding:1.75rem}
 
@@ -561,7 +563,7 @@ body.animations-off .hero-prompt,body.animations-off .hero h1,body.animations-of
   }
   .car-viewport::-webkit-scrollbar{display:none}
   .why-item{
-    width:calc(100%/5); /* 1 per viewport */
+    width:calc(100%/5 * .85); /* 85%: next card peeks 15% for scroll hint */
     scroll-snap-align:start;
     padding:1.25rem 1rem;
   }
@@ -1425,7 +1427,8 @@ document.addEventListener('keydown', (e) => {
     // scroll past 3 leading clones to show first real item
     requestAnimationFrame(()=>{
       const vp = track.parentElement;
-      vp.scrollLeft = 3 * (vp.clientWidth);
+      const itemW = track.children[0].getBoundingClientRect().width;
+      vp.scrollLeft = 3 * itemW;
     });
   }
 
