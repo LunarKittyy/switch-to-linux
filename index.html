@@ -549,7 +549,7 @@ body.animations-off .hero-prompt,body.animations-off .hero h1,body.animations-of
 .why-item:nth-child(3n+1){border-left:none}
 .why-item:hover{background:var(--sur)}
 @media(max-width:640px){
-  /* carousel: scroll-snap, 1 item, no arrows */
+  /* carousel: scroll-snap, 1 item at a time, no arrows, no clones */
   .carousel-wrap{
     margin-inline:calc(-1 * clamp(1.25rem,5vw,2rem));
     padding-inline:0;
@@ -560,10 +560,17 @@ body.animations-off .hero-prompt,body.animations-off .hero h1,body.animations-of
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
+    overscroll-behavior-x:contain;
   }
   .car-viewport::-webkit-scrollbar{display:none}
+  .car-track{width:auto} /* natural width of real items only */
+  /* hide leading (1-3) and trailing (13-15) clones */
+  .why-item:nth-child(-n+3),
+  .why-item:nth-child(n+13){display:none}
   .why-item{
-    width:calc(100%/5 * .85); /* 85%: next card peeks 15% for scroll hint */
+    width:85vw; /* direct viewport units, 15% peek of next card */
+    min-width:85vw;
+    flex-shrink:0;
     scroll-snap-align:start;
     padding:1.25rem 1rem;
   }
@@ -627,7 +634,7 @@ body.mode-light .why-num{color:var(--mu)}
     <span class="h1-above">switch to</span>
     LINUX<span class="h1-dot">.</span>
   </h1>
-  <p class="hero-sub">No jargon. No assumptions. A clear path from Windows to the right distro for you.</p>
+
   <div class="hero-actions">
     <a href="#pick" class="btn-primary">Find my distro →</a>
     <a href="#why" class="btn-ghost">Why switch?</a>
@@ -640,8 +647,8 @@ body.mode-light .why-num{color:var(--mu)}
 <div class="wrap" id="why">
 <div class="sec">
   <div class="sec-lbl tl reveal">sound familiar?</div>
-  <h2 class="reveal rev-1">Windows has been getting worse.<br>Gradually, then noticeably.</h2>
-  <p class="sec-sub reveal rev-2">Not because Linux is perfect. But because most people switch when Windows friction crosses a line. These are the things that push people over it.</p>
+  <h2 class="reveal rev-1">Windows has been getting worse.</h2>
+  <p class="sec-sub reveal rev-2">Most people don't switch for ideological reasons. They switch because something finally annoyed them enough. These are the things that do it.</p>
 
     <div class="carousel-wrap reveal rev-2">
     <button class="car-arrow car-prev" onclick="carPrev()" aria-label="Previous">&#8592;</button>
@@ -670,7 +677,7 @@ body.mode-light .why-num{color:var(--mu)}
     </div>    <div class="why-item">
       <span class="why-num">// the abandonment</span>
       <div class="why-title">Your perfectly good computer is now "unsupported"</div>
-      <p class="why-body">Windows 10 reached end of life in October 2025. Millions of working machines were declared too old for Windows 11, not because they're slow, but due to <em>arbitrary hardware requirements.</em> <em>Linux doesn't care.</em> It runs well on that hardware.</p>
+      <p class="why-body">Windows 10 reached end of life in October 2025. Millions of working machines were declared too old for Windows 11, not because they're slow, but due to <em>arbitrary hardware requirements.</em> <em>Linux doesn't care.</em> It runs fine on hardware Windows has written off.</p>
     </div>    <div class="why-item">
       <span class="why-num">// the ads</span>
       <div class="why-title">Ads. In an operating system.</div>
@@ -706,7 +713,7 @@ body.mode-light .why-num{color:var(--mu)}
     </div>    <div class="why-item">
       <span class="why-num">// the abandonment</span>
       <div class="why-title">Your perfectly good computer is now "unsupported"</div>
-      <p class="why-body">Windows 10 reached end of life in October 2025. Millions of working machines were declared too old for Windows 11, not because they're slow, but due to <em>arbitrary hardware requirements.</em> <em>Linux doesn't care.</em> It runs well on that hardware.</p>
+      <p class="why-body">Windows 10 reached end of life in October 2025. Millions of working machines were declared too old for Windows 11, not because they're slow, but due to <em>arbitrary hardware requirements.</em> <em>Linux doesn't care.</em> It runs fine on hardware Windows has written off.</p>
     </div>
       </div>
     </div>
@@ -714,7 +721,7 @@ body.mode-light .why-num{color:var(--mu)}
   </div>
 
   <div class="why-honest reveal">
-    <strong>The honest version:</strong> switching takes a day to get comfortable with. Some things work differently. Some things don't exist on Linux. This guide covers all of that. But for most people, the frustrations above are real and daily, and Linux <em>mostly just doesn't have them.</em>
+    Switching does take a day to get comfortable with. Some things work differently. Some things don't exist on Linux. But for most people, the frustrations above are real and daily, and Linux <em>mostly just doesn't have them.</em>
   </div>
 </div>
 </div>
@@ -727,7 +734,7 @@ body.mode-light .why-num{color:var(--mu)}
 <div class="sec">
   <div class="sec-lbl blink reveal">before you start</div>
   <h2 class="reveal rev-1">Will Linux work for you?</h2>
-  <p class="sec-sub reveal rev-2">Most things work great. A few things don't. Worth knowing before you commit.</p>
+  <p class="sec-sub reveal rev-2">Most things work well. A few don't, and it's worth knowing which before you invest time.</p>
   <div class="check-intro reveal rev-3">
     <div class="check-col go">
       <h3>Works great</h3>
@@ -757,7 +764,7 @@ body.mode-light .why-num{color:var(--mu)}
     <strong>On gaming:</strong> Valve's Proton (same tech in every Steam Deck) makes most Windows games run on Linux with zero setup. Check any game at <a href="https://protondb.com" target="_blank" rel="noopener">protondb.com</a>. Anti-cheat status at <a href="https://areweanticheatyet.com" target="_blank" rel="noopener">areweanticheatyet.com</a>.
   </div>
   <div class="note reveal" style="margin-block-start:1px;border-left-color:var(--tl)">
-    <strong style="color:var(--tl)">One thing before you go further:</strong> Linux is not Windows with a different skin. It is a different OS with its own way of doing things, the same way macOS feels different from Windows, or how Android felt foreign the first time you picked up a smartphone. When something works differently from what you expect, the instinct is to read it as broken. That instinct is almost always wrong. <em>Linux has a way to do everything.</em> The path is sometimes different, and sometimes, after a week of using it, the Linux way turns out to be better. A lot of things that look like they are missing a "proper" app are actually lightweight tools that do the same job in two keystrokes with no loading screen. That is a design choice, not an oversight. Approach it like <em>a new computer, not a broken Windows</em>, and it clicks fast.
+    <strong style="color:var(--tl)">One thing before you go further:</strong> Linux is not Windows with a different skin. It is a different OS with its own way of doing things, the same way macOS or Android felt unfamiliar at first. When something works differently from what you expect, the instinct is to read it as broken. That instinct is almost always wrong. <em>Linux has a way to do everything.</em> The path is sometimes different, and sometimes, after a week of using it, the Linux way turns out to be better. A lot of things that look like they are missing a "proper" app are actually lightweight tools that do the same job in two keystrokes with no loading screen. That is a design choice, not an oversight. Approach it like <em>a new computer, not a broken Windows</em>, and it clicks fast.
   </div>
 </div>
 </div>
@@ -770,7 +777,7 @@ body.mode-light .why-num{color:var(--mu)}
 <div class="sec">
   <div class="sec-lbl tl reveal">step 1</div>
   <h2 class="reveal rev-1">Find your distro</h2>
-  <p class="sec-sub reveal rev-2">Three questions. One clear recommendation.</p>
+
 
   <div class="term reveal rev-3">
     <div class="term-bar">
@@ -843,7 +850,7 @@ body.mode-light .why-num{color:var(--mu)}
         <div class="q-opts">
           <button class="q-choice" onclick="A.p='mint';show()">
             <span class="q-bracket">(</span><span class="q-key">1</span><span class="q-bracket">)</span><span class="q-main">Slow and steady - set it up once, leave it alone</span>
-            <span class="q-sub">Changes rarely. LTS releases, no surprises for years.</span>
+            <span class="q-sub">Changes rarely. Long-term support releases mean no surprises for years.</span>
           </button>
           <button class="q-choice" onclick="A.p='fed';show()">
             <span class="q-bracket">(</span><span class="q-key">2</span><span class="q-bracket">)</span><span class="q-main">Fresh and modern - KDE Plasma, latest everything</span>
@@ -860,8 +867,8 @@ body.mode-light .why-num{color:var(--mu)}
   <div class="rc" id="res-mint">
     <div class="rc-inner">
       <div class="rc-name">Linux Mint (Cinnamon)</div>
-      <div class="rc-tag">The most recommended beginner distro, consistently, year after year.</div>
-      <div class="rc-why">Cinnamon desktop looks and works like Windows from day one. Everything is set up out of the box, including codecs for audio and video. Long Term Support releases mean no forced reinstalls for years. It avoids Ubuntu's Snap format in favor of regular apps. It's the distro the Linux community keeps returning to as the safest starting point.</div>
+      <div class="rc-tag">The most consistently recommended distro for people switching from Windows.</div>
+      <div class="rc-why">Cinnamon desktop looks and works like Windows from day one. Everything works on install, including codecs for audio and video. Long Term Support releases mean no forced reinstalls for years. It avoids Ubuntu's Snap format in favor of regular apps. It's what the Linux community recommends when someone asks where to begin.</div>
       <div class="rc-pros">
         <span class="rc-pro">Windows-like from day 1</span>
         <span class="rc-pro">codecs pre-installed</span>
@@ -882,7 +889,7 @@ body.mode-light .why-num{color:var(--mu)}
   <div class="rc" id="res-fedora">
     <div class="rc-inner">
       <div class="rc-name">Fedora KDE Plasma Desktop</div>
-      <div class="rc-tag">The freshest mainstream Linux, now a first-class Fedora edition with its own download page.</div>
+      <div class="rc-tag">Always running the latest software. Now a first-class Fedora edition with its own download page.</div>
       <div class="rc-why">KDE Plasma has a taskbar, a start menu, a system tray  -  everything where Windows users expect it. The default Fedora desktop (GNOME) has a completely different workflow that takes real adjustment. Fedora ships the latest KDE releases fast, months ahead of Ubuntu-based alternatives. It also handles apps that haven't updated to the new display system yet, which matters for some games.</div>
       <div class="rc-pros">
         <span class="rc-pro">KDE = familiar to Windows users</span>
@@ -904,8 +911,8 @@ body.mode-light .why-num{color:var(--mu)}
   <div class="rc" id="res-bazzite">
     <div class="rc-inner">
       <div class="rc-name">Bazzite</div>
-      <div class="rc-tag">The Steam Deck experience on your desktop. Console-first, immutable, unbreakable.</div>
-      <div class="rc-why">GPU drivers are auto-configured. Steam + Proton + Proton-GE are pre-installed and ready. The core OS is immutable (read-only)  -  you literally cannot accidentally break it, and it auto-rolls back bad updates. The trade-off: it's designed to be left alone. If you want to heavily customize the system or install lots of non-gaming software, that gets complicated. It's a gaming appliance, not a general Linux desktop.</div>
+      <div class="rc-tag">Built for gaming, designed to be left alone. The same tech that runs every Steam Deck.</div>
+      <div class="rc-why">GPU drivers are auto-configured. Steam + Proton + Proton-GE are pre-installed and ready. The core OS is immutable (read-only)  -  you literally cannot accidentally break it, and it rolls back bad updates automatically. The trade-off: it's designed to be left alone. If you want to heavily customize the system or install lots of non-gaming software, that gets complicated. It's a gaming appliance, not a general Linux desktop.</div>
       <div class="rc-pros">
         <span class="rc-pro">GPU drivers auto-configured</span>
         <span class="rc-pro">NVIDIA + AMD both supported</span>
@@ -927,7 +934,7 @@ body.mode-light .why-num{color:var(--mu)}
     <div class="rc-inner">
       <div class="rc-name">Nobara Linux</div>
       <div class="rc-tag">Fedora built for gaming by Thomas Crider (GloriousEggroll), a Valve engineer who maintains the most trusted Proton compatibility tools in the Linux community.</div>
-      <div class="rc-why">Unlike Bazzite, this is a normal Linux install where you can change anything and install whatever you want. It comes with the full gaming stack ready to go: Steam, Prism Launcher, a graphical Proton version manager, and a game performance optimizer  -  all pre-installed. There's a dedicated Nvidia version with the official driver already bundled. It also has a self-healing updater that fixes situations where software packages disagree about what versions they need.</div>
+      <div class="rc-why">Unlike Bazzite, this is a normal Linux install where you can change anything and install whatever you want. It ships with the full gaming stack already set up: Steam, Prism Launcher, a graphical Proton version manager, and a game performance optimizer  -  all pre-installed. There's a dedicated Nvidia version with the official driver already bundled. It also has a self-healing updater that fixes situations where software packages disagree about what versions they need.</div>
       <div class="rc-pros">
         <span class="rc-pro">gaming stack pre-installed</span>
         <span class="rc-pro">Nvidia version available</span>
@@ -936,7 +943,7 @@ body.mode-light .why-num{color:var(--mu)}
         <span class="rc-pro">Proton manager + game optimizer</span>
         <span class="rc-pro">self-healing updater</span>
       </div>
-      <div class="rc-cav">Requires Secure Boot to be <strong>disabled</strong> in your BIOS  -  Nobara is unsigned and won't boot with it on. Smaller team moving fast, can occasionally have rough edges around updates. Valorant and games with aggressive anti-cheat still don't work. Check <a href="https://areweanticheatyet.com" target="_blank" rel="noopener">areweanticheatyet.com</a> for your specific games.</div>
+      <div class="rc-cav">Requires Secure Boot to be <strong>disabled</strong> in your BIOS  -  Nobara is unsigned and won't boot with it on. Smaller team moving fast, can occasionally have issues around updates. Valorant and games with aggressive anti-cheat still don't work. Check <a href="https://areweanticheatyet.com" target="_blank" rel="noopener">areweanticheatyet.com</a> for your specific games.</div>
       <div class="rc-btns">
         <a href="https://nobaraproject.org" target="_blank" rel="noopener" class="btn-dl">Download Nobara →</a>
         <button class="btn-rst" onclick="rst()">← retake</button>
@@ -949,7 +956,7 @@ body.mode-light .why-num{color:var(--mu)}
     <div class="rc-inner">
       <div class="rc-name">MX Linux</div>
       <div class="rc-tag">Built for constrained hardware. Makes old machines fast again.</div>
-      <div class="rc-why">Built on Debian  -  one of the oldest and most trusted Linux foundations  -  with a lightweight desktop (XFCE) that runs well on 2 GB RAM or less. Includes helpful custom system tools and even supports older 32-bit processors most distros have dropped. Consistently one of the most downloaded distros for good reason: no flash, just works.</div>
+      <div class="rc-why">Built on Debian  -  one of the oldest and most trusted Linux foundations  -  with a lightweight desktop (XFCE) that runs well on 2 GB RAM or less. Includes helpful custom system tools and even supports older 32-bit processors most distros have dropped. One of the most downloaded distros for years. No pretension, works reliably.</div>
       <div class="rc-pros">
         <span class="rc-pro">runs on 2 GB RAM</span>
         <span class="rc-pro">Debian stable base</span>
@@ -977,8 +984,8 @@ body.mode-light .why-num{color:var(--mu)}
 <div class="sec">
   <div class="sec-lbl reveal">step 2</div>
   <h2 class="reveal rev-1">Try it before installing anything</h2>
-  <p class="sec-sub reveal rev-2">Boot Linux from a USB stick. Nothing on your computer changes. Remove it and everything's back.</p>
-  <div class="note reveal">This is called a <strong>Live USB</strong>. Test your Wi-Fi, plug in your printer, try a game. If it works, click Install. If not, unplug and move on.</div>
+  <p class="sec-sub reveal rev-2">Boot Linux from a USB stick — nothing on your computer changes, and removing it puts everything back exactly as it was.</p>
+  <div class="note reveal">This is called a <strong>Live USB</strong>. Test your Wi-Fi, plug in your printer, try a game. If it works, click Install. If not, unplug and try a different distro or check the hardware database.</div>
   <div class="steps">
     <div class="step reveal">
       <div class="step-n">01</div>
@@ -1025,7 +1032,7 @@ body.mode-light .why-num{color:var(--mu)}
 <div class="sec">
   <div class="sec-lbl tl reveal">if you hit a problem</div>
   <h2 class="reveal rev-1">Common issues</h2>
-  <p class="sec-sub reveal rev-2">All solvable. Open what's relevant to you, ignore the rest.</p>
+  <p class="sec-sub reveal rev-2">Expand what applies to you.</p>
 
   <div class="acc reveal rev-3">
 
@@ -1362,7 +1369,7 @@ function rst() {
         <div class="q-opts">
           <button class="q-choice" onclick="A.p='mint';show()">
             <span class="q-bracket">(</span><span class="q-key">1</span><span class="q-bracket">)</span><span class="q-main">Slow and steady - set it up once, leave it alone</span>
-            <span class="q-sub">Changes rarely. LTS releases, no surprises for years.</span>
+            <span class="q-sub">Changes rarely. Long-term support releases mean no surprises for years.</span>
           </button>
           <button class="q-choice" onclick="A.p='fed';show()">
             <span class="q-bracket">(</span><span class="q-key">2</span><span class="q-bracket">)</span><span class="q-main">Fresh and modern - KDE Plasma, latest everything</span>
@@ -1424,12 +1431,11 @@ document.addEventListener('keydown', (e) => {
   // Mobile: use native scroll-snap instead of JS transform
   function isMobile(){ return window.innerWidth <= 640 }
   if(isMobile()){
-    // scroll past 3 leading clones to show first real item
-    requestAnimationFrame(()=>{
-      const vp = track.parentElement;
-      const itemW = track.children[0].getBoundingClientRect().width;
-      vp.scrollLeft = 3 * itemW;
-    });
+    // clones hidden via CSS, track starts at real item 0
+    // just reset the desktop transform
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(0)';
+    track.offsetHeight;
   }
 
   track.addEventListener('transitionend', function() {
